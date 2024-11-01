@@ -18,7 +18,8 @@ export const getArtists = async (token, genre, page) => {
 
 //Register a new user
 export const register = async () => {
-    const response = await axios.get("/api/auth/register");
+
+    const response = await axios.patch("/api/auth/register");
     return response.data;
 }
 
