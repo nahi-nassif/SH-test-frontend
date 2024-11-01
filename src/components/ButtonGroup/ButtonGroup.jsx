@@ -10,7 +10,7 @@ export default memo(function ButtonGroup({ title, data, buttonStyle, containerSt
             
             {data && data.map( d => 
                 <button
-                    onClick={() => onGenreSelected()}
+                    onClick={() => onGenreSelected(d)}
                     key={d}
                     type="button"
                     className={"relative inline-flex " + buttonStyle || "items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"}

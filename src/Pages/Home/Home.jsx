@@ -1,6 +1,8 @@
 import ButtonGroup from "../../components/ButtonGroup/ButtonGroup";
 import { useGetGenres } from "../../services/api/apiHooks";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+
 
 //Styling
 const buttonWrapperStyle = "flex-wrap rounded-md shadow-sm p-4 min-w-[50%] justify-center gap-2";
@@ -11,9 +13,20 @@ const Home = () => {
     const [ cookies , ] = useCookies(["authToken"]);
     const token = cookies?.authToken;
     const { data } =  useGetGenres(token);
+    const navigate = useNavigate();
+
+    const handleGenreChange = (genre) => {
+        navigate(`/artists/${genre}`)
+    }
 
     return <div className="h-screen w-full flex flex-wrap items-center justify-center">
-        <ButtonGroup title="Pick your genre" data={data} buttonStyle={buttonstyle} buttonWrapperStyle={buttonWrapperStyle} containerStyle={containerStyle}/>
+        <ButtonGroup 
+            title="Pick your genre" 
+            data={data} buttonStyle={buttonstyle} 
+            buttonWrapperStyle={buttonWrapperStyle} 
+            containerStyle={containerStyle} 
+            onGenreSelected={handleGenreChange}
+        />
     </div>
 
 }
