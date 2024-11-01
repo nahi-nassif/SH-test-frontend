@@ -13,11 +13,11 @@ export const useGetGenres = (token) =>
 export const useGetArtists = (token, genre, page) => 
   useQuery({
     queryKey: ["artists", {token: token, genre: genre, page: page}],
-    queryFn: () => api.getGenres(token, genre, page),
+    queryFn: () => api.getArtists(token, genre, page),
 });
 
 export const useGetChatHistory = (token, artistId) => 
   useQuery({
     queryKey: ["artists", {token: token, artistId: artistId}],
-    queryFn: () => api.getGenres(token, artistId),
+    queryFn: () => api.getChatHistory(token, artistId),
 });
