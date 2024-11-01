@@ -144,3 +144,36 @@ code {
     monospace;
 }
 
+
+body {
+  --sb-track-color: #1a1a1a;
+  --sb-thumb-color: #0d3d45;
+  --sb-size: 9px;
+}
+
+::-webkit-scrollbar {
+  width: var(--sb-size)
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: inherit;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: inherit;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body *{
+    scrollbar-color: var(--sb-thumb-color)
+                     var(--sb-track-color);
+  }
+}
+
