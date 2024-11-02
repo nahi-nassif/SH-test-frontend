@@ -36,6 +36,7 @@ const VariableSizeListCustom = ({ data, listStyles, gap=20 }) => {
       if (rowRef.current) {
         setRowHeight(index, rowRef.current.clientHeight + gap); // get height for every item
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rowRef]);
 
 

@@ -32,16 +32,4 @@ const ImageWithPlaceholder = ({ src, placeholder, alt, ...props }) => {
   );
 };
 
-const styles = {
-  image: {
-    width: '100%',
-    height: 'auto',
-  },
-  placeholder: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
-};
-
 export default ImageWithPlaceholder;
