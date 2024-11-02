@@ -38,7 +38,6 @@ const ChatRoom = () => {
 
     const handleSend = () => {
         if(artist?.id && ref.current.value){
-            console.log(token, artist.id, ref.current.value);
             ref.current.disabled = true;
             setMessages((prevMessages) => [...prevMessages, {isReply: false, fromId: artist.id, message: ref.current.value}])
             getResponse.mutate({token: token, artistId: artist.id,message: ref.current.value});
@@ -79,7 +78,8 @@ const ChatRoom = () => {
     //Add Response
     useEffect(() => {
         if (getResponse.data) {
-            setMessages((prevMessages) => [...prevMessages, {isReply: getResponse.data.isReply, fromId:  getResponse.data.fromId, message: getResponse.data.message}])
+            ref.current.disabled = false;
+            setMessages((prevMessages) => [...prevMessages, {isReply: true, fromId:  artist.id, message: getResponse.data.message}])
         }
     }, [getResponse.data]);
 
@@ -110,7 +110,7 @@ const ChatRoom = () => {
                 />
             </Header>
             {/*Used to Reduce Renders to the DOM for large chats*/}
-            <VariableSizeListCustom data={messages} listStyles={"text-white"}/>
+            <VariableSizeListCustom data={messages} listStyles={"text-white mx-[5%] sm:mx-[10%] mt-10 mb-5"}/>
             <div className="absolute w-full bottom-[5%]">
                 <div className="relative">
                     <TextArea 
@@ -123,6 +123,7 @@ const ChatRoom = () => {
                         textAreaStyle={textAreaStyle}
                         iconStyle={iconStyle}
                         rows={3}
+                        key={messages.length}
                     />
                     <button 
                         className="absolute bg-[#187180] rounded-3xl text-white text-sm px-3 py-1 mx-[5%] sm:mx-[10%] right-8 bottom-6"

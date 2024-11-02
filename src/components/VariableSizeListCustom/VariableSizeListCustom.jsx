@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { VariableSizeList } from 'react-window';
 
-const VariableSizeListCustom = ({ data, listStyles }) => {
+const VariableSizeListCustom = ({ data, listStyles, gap=20 }) => {
 
   const listRef = useRef({}) // to get reference of list container 
   const rowHeights = useRef({}) // to have heights of every row item
@@ -35,7 +35,7 @@ const VariableSizeListCustom = ({ data, listStyles }) => {
 
     useEffect(() => {
       if (rowRef.current) {
-        setRowHeight(index, rowRef.current.clientHeight) // get height for every item
+        setRowHeight(index, rowRef.current.clientHeight + gap) // get height for every item
       }
     }, [rowRef])
 
@@ -56,10 +56,14 @@ const VariableSizeListCustom = ({ data, listStyles }) => {
       in the same HTML element
     
     */
-
+    const renderedItem = items && items.length > 0 ? items[index] : null
     return (
-      <div style={style}>
-        <div ref={rowRef} >{ items && items.length > 0 && items[index].message }</div>
+      <div style={style} 
+      className={``}>
+        <div ref={rowRef} 
+        dangerouslySetInnerHTML={{__html: renderedItem && renderedItem.message}}
+        className={`py-2 px-4 text-[#111928] w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%] rounded-3xl ${renderedItem.isReply ? "bg-white float-left" : "bg-[#97E2F7] float-right"}`}
+        ></div>
       </div>
       
     );
@@ -73,7 +77,7 @@ const VariableSizeListCustom = ({ data, listStyles }) => {
         height={divHeight}
         itemCount={itemCount}
         itemSize={getRowHeight}
-        width="100%"
+        width="auto"
         className={listStyles}
       >
         {ListItem}
