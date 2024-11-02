@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
     useNavigate
 } from "react-router-dom";
@@ -31,22 +31,24 @@ const ChatRoom = () => {
     const [messages, setMessages] = useState(oldMessages)
     const [input, setInput] = useState("");
 
-  // Calculate window dimensions to use in Fixed List
-  const [windowDimensions, setWindowDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+    const ref = useRef(null); //Used to Reference the user's inputs (To Reduce renders instead of using states)
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowDimensions({
+    // Calculate window dimensions to use in Fixed List
+    const [windowDimensions, setWindowDimensions] = useState({
         width: window.innerWidth,
         height: window.innerHeight,
-      });
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    });
+
+    useEffect(() => {
+        const handleResize = () => {
+        setWindowDimensions({
+            width: window.innerWidth,
+            height: window.innerHeight,
+        });
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
     
     useEffect(()=>{
         if(!artist?.id)
@@ -99,7 +101,7 @@ const ChatRoom = () => {
             <div className="absolute w-full">
                 <TextArea 
                     name="message"
-                    value={input}
+                    ref={ref}
                     onChange={() => setInput(input)}
                     placeholder={"Type text, or upload, paste, and drag an image here. "}
                     placeholderIcon={<img alt="icon" src="/icons/chatIcon.png"/>}

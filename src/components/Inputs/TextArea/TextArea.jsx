@@ -1,16 +1,20 @@
 import "./style.css"
+import { forwardRef, useState } from 'react';
 
-
-const TextArea = ({ name, maxCharacters, rows, placeholder, placeholderIcon, onChange, onFocus, value,textAreaContainerStyle, textAreaStyle, counterStyle}) => {
+const TextArea = forwardRef(({ name, maxCharacters, rows, placeholder, placeholderIcon, onChange, onFocus, textAreaContainerStyle, textAreaStyle, counterStyle}, ref) => {
 
     const maxChars = maxCharacters || 3000; // Maximum character limit
+    const [inputLength, setInputLength] = useState(0)
 
     return (
         <div className={"text-area relative " + textAreaContainerStyle}>
             <textarea
+                ref={ref}
                 name = {name || "text"}
-                value={value}
-                onChange={onChange}
+                onChange={(e)=>{
+                    setInputLength(ref.current?.value?.length || 0)
+                    onChange(e);
+                }}
                 onFocus={onFocus}
                 rows={ rows || 2}
                 maxLength={maxChars} // Set max characters
@@ -23,12 +27,12 @@ const TextArea = ({ name, maxCharacters, rows, placeholder, placeholderIcon, onC
                 </span>
             }
             <div className={"absolute bottom-1 right-0 " + counterStyle}>
-                {value?.length || 0} / {maxChars}
+                {inputLength || 0} / {maxChars}
             </div>
         </div>
     )
 
     
-}
+})
 
 export default TextArea;
