@@ -1,0 +1,8 @@
+.text-area textarea{
+    width: 100%;
+    resize: none;
+}
+
+.text-area textarea:focus ~.icon{
+    display: none;
+}
