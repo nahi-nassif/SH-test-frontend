@@ -15,7 +15,6 @@ const TextArea = ({ name, maxCharacters, rows, placeholder, placeholderIcon, onC
                 rows={ rows || 2}
                 maxLength={maxChars} // Set max characters
                 placeholder={placeholder || "Type your message..."}
-                style={{ width: '100%', resize: 'none' }}
                 className={"p-4 placeholder:indent-4 " + textAreaStyle}
             />
             {
