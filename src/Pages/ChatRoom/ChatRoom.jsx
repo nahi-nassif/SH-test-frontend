@@ -17,9 +17,9 @@ const titleStyle = "text-left font-bold text-white"
 const followerStyle = "text-left text-sm text-[#B3B3B3] font-semibold"
 const popularitStyle = "ml-2 bg-[#0D3D45] text-[#69D8F7] text-sm font-bold rounded-sm min-w-[39px] inline-block text-center"
 //TextAreaStyle
-const counterStyle = "text-sm right-24 text-[#A9ABB2] bottom-8"
+const counterStyle = "text-sm right-28 text-[#A9ABB2] bottom-7"
 const textAreaStyle = "border border-[#E5E7EB] rounded-lg"
-const textAreaContainerStyle = "mx-[10%] bg-[#F9F9F9] border border-[#E5E7EB] flex p-4 rounded-3xl"
+const textAreaContainerStyle = "mx-[5%] sm:mx-[10%] bg-[#F9F9F9] border border-[#E5E7EB] flex p-4 rounded-3xl"
 const iconStyle = "left-7 top-9"
 
 const ChatRoom = () => {  
@@ -41,10 +41,10 @@ const ChatRoom = () => {
 
     useEffect(() => {
         const handleResize = () => {
-        setWindowDimensions({
-            width: window.innerWidth,
-            height: window.innerHeight,
-        });
+            setWindowDimensions({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
         };
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -91,6 +91,7 @@ const ChatRoom = () => {
                 itemCount={messages.length}
                 itemSize={50}
                 itemData={messages}
+                className="max-w-full"
             >
                 {({ index, style, data }) => (
                     <div style={style}>
@@ -99,18 +100,28 @@ const ChatRoom = () => {
                 )}
             </List>
             <div className="absolute w-full bottom-[5%]">
-                <TextArea 
-                    name="message"
-                    ref={ref}
-                    placeholder={"Type text, or upload, paste, and drag an image here. "}
-                    placeholderIcon={<img alt="icon" src="/icons/chatIcon.png"/>}
-                    counterStyle={counterStyle}
-                    textAreaContainerStyle={textAreaContainerStyle}
-                    textAreaStyle={textAreaStyle}
-                    iconStyle={iconStyle}
-                    rows={3}
-                />
+                <div className="relative">
+                    <TextArea 
+                        name="message"
+                        ref={ref}
+                        placeholder={"Type text, or upload, paste, and drag an image here. "}
+                        placeholderIcon={<img alt="icon" src="/icons/chatIcon.png"/>}
+                        counterStyle={counterStyle}
+                        textAreaContainerStyle={textAreaContainerStyle}
+                        textAreaStyle={textAreaStyle}
+                        iconStyle={iconStyle}
+                        rows={3}
+                    />
+                    <button 
+                        className="absolute bg-[#187180] rounded-3xl text-white text-sm px-3 py-1 mx-[5%] sm:mx-[10%] right-8 bottom-6"
+                        style={{right: "calc(10%, 20px)"}}
+                    >
+                        Send <img className="inline-block" alt="sendIcon" src="/icons/sendIcon.png"/>
+                    </button>
+                </div>
+                
             </div>
+            
 
         </div>
     );
