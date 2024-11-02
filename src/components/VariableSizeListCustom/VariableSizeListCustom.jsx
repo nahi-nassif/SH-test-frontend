@@ -71,7 +71,7 @@ const VariableSizeListCustom = ({ data, listStyles, gap=20 }) => {
 
 
   return (
-    <div ref={rootRef} style={{ height: 'calc(100% - 100px)', width: '100%' }}>
+    <div ref={rootRef} style={{ height: '100%', width: '100%' }}>
       <VariableSizeList
         ref={listRef}
         height={divHeight}

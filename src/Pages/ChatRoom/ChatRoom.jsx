@@ -93,7 +93,7 @@ const ChatRoom = () => {
 
 
     return (
-        <div className="h-screen overflow-x-hidden">
+        <div className="h-screen overflow-x-hidden flex flex-col w-full">
             <Header
                 headerStyle="h-16 bg-[#1A1A1A]"
                 enableBackButton={true}
@@ -110,7 +110,9 @@ const ChatRoom = () => {
                 />
             </Header>
             {/*Used to Reduce Renders to the DOM for large chats*/}
-            <VariableSizeListCustom data={messages} listStyles={"text-white mx-[5%] sm:mx-[10%] mt-10 mb-5"}/>
+            <div className='grow pt-10 pb-5'>
+                <VariableSizeListCustom data={messages} listStyles={"text-white mx-[5%] sm:mx-[10%]"}/>
+            </div>        
             <div className="w-full mb-[2%]">
                 <div className="relative">
                     <TextArea 
