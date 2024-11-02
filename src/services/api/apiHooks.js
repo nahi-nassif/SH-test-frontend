@@ -27,7 +27,7 @@ export const useGetChatHistory = (token, artistId) =>
 export const useGetResponse = () => {
     const queryClient = useQueryClient();
     return useMutation({
-    mutationFn: (token, artistId, message) => api.getResponse(token, artistId, message),
+    mutationFn: (data) => api.getResponse(data.token, data.artistId, data.message),
     onSuccess: () => {
         // Invalidate and refetch
         queryClient.invalidateQueries({ queryKey: ['chatHistory'] })

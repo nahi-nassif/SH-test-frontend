@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import {
     useNavigate
 } from "react-router-dom";
-import { useGetChatHistory } from "../../services/api/apiHooks";
+import { useGetChatHistory, useGetResponse } from "../../services/api/apiHooks";
 import { toast } from "react-hot-toast";
 import { useCookies } from "react-cookie";
 import Header from "../../components/Header/Header";
@@ -23,16 +23,29 @@ const textAreaContainerStyle = "mx-[5%] sm:mx-[10%] bg-[#F9F9F9] border border-[
 const iconStyle = "left-7 top-9"
 
 const ChatRoom = () => {  
-    const [cookies,] = useCookies(["authToken","selectedArtist"]);
+    const [cookies,] = useCookies(["authToken","selectedArtist"]); //cokies
     const artist = cookies?.selectedArtist;
     const token = cookies?.authToken;
-    const { data, error } = useGetChatHistory(token, artist?.id);
+    const { data, error } = useGetChatHistory(token, artist?.id); //Get chat history if available
     const navigate = useNavigate();
     const oldMessages = data && data.length > 0 ? data : [];
-    const [messages, setMessages] = useState(oldMessages)
+    const [messages, setMessages] = useState(oldMessages) //State to hold chat
 
     const ref = useRef(null); //Used to Reference the user's inputs (To Reduce renders instead of using states)
 
+    const getResponse = useGetResponse()
+
+    const handleSend = () => {
+        if(artist?.id && ref.current.value){
+            console.log(token, artist.id, ref.current.value);
+            ref.current.disabled = true;
+            setMessages((prevMessages) => [...prevMessages, {isReply: false, fromId: artist.id, message: ref.current.value}])
+            getResponse.mutate({token: token, artistId: artist.id,message: ref.current.value});
+
+        }
+        
+
+    }
     // Calculate window dimensions to use in Fixed List
     const [windowDimensions, setWindowDimensions] = useState({
         width: window.innerWidth,
@@ -67,6 +80,23 @@ const ChatRoom = () => {
         }
     }, [error])
 
+    useEffect(() => {
+        if (getResponse.error) {
+            toast.error(getResponse.error.response?.data?.message || getResponse.error.message)
+            if(getResponse.error.response?.status === 401 || getResponse.error.response?.status === 403){
+                console.log("Unauthorized")
+            }
+            console.log(getResponse.error)
+        }
+    }, [getResponse.error]);
+
+    useEffect(() => {
+        if (getResponse.data) {
+            setMessages((prevMessages) => [...prevMessages, {isReply: getResponse.data.isReply, fromId:  getResponse.data.fromId, message: getResponse.data.message}])
+        }
+    }, [getResponse.data]);
+
+
     return (
         <div>
             <Header
@@ -91,11 +121,11 @@ const ChatRoom = () => {
                 itemCount={messages.length}
                 itemSize={50}
                 itemData={messages}
-                className="max-w-full"
+                className="max-w-full text-white"
             >
                 {({ index, style, data }) => (
                     <div style={style}>
-                        <p>{data[index].text}</p>
+                        <p>{data[index].message}</p>
                     </div>
                 )}
             </List>
@@ -115,6 +145,8 @@ const ChatRoom = () => {
                     <button 
                         className="absolute bg-[#187180] rounded-3xl text-white text-sm px-3 py-1 mx-[5%] sm:mx-[10%] right-8 bottom-6"
                         style={{right: "calc(10%, 20px)"}}
+                        disabled={getResponse.isPending}
+                        onClick={handleSend}
                     >
                         Send <img className="inline-block" alt="sendIcon" src="/icons/sendIcon.png"/>
                     </button>
