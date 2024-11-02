@@ -14,13 +14,11 @@ export const selectedArtistSlice = createSlice({
   reducers: {
     setSelectedArtist: (state, action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It uses the Immer library
-      state = {
-        id: action.payload?.id,
-        name: action.payload?.name,
-        img: action.payload?.img,
-        followers: action.payload?.followers,
-        popularity: action.payload?.popularity
-      }
+      state.id = action.payload?.id;
+      state.name = action.payload?.name;
+      state.img = action.payload?.img;
+      state.followers = action.payload?.followers;
+      state.popularity = action.payload?.popularity;
     },
   }
 })
