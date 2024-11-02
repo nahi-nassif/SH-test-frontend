@@ -7,9 +7,7 @@ import { useGetArtists } from "../../services/api/apiHooks";
 import { toast } from "react-hot-toast";
 import { useCookies } from "react-cookie";
 import ArtistCard from "../../components/ArtistCard/ArtistCard";
-import Header from "../../components/Header/Header"
-import { useDispatch } from 'react-redux'
-import { setSelectedArtist } from '../../redux/features/selectedArtistSlice'
+import Header from "../../components/Header/Header";
 
 //Styling
 const cardStyle = "p-4 mx-auto rounded-xl w-full"
@@ -19,10 +17,9 @@ const popularitStyle = "bottom-0 right-4 pb-4 px-1 pt-1 bg-[#0D3D45] text-[#69D8
 
 const Artists = () => {
     const { genre } = useParams();
-    const [ cookies , ] = useCookies(["authToken"]);
+    const [ cookies , setCookie ] = useCookies(["authToken","selectedArtist"]);
     const token = cookies?.authToken;
     const { data, error } = useGetArtists(token, genre, 1);
-    const dispatch = useDispatch()
 
     const navigate = useNavigate();
 
@@ -30,7 +27,7 @@ const Artists = () => {
         navigate("/"); // Equivalent to a browser back action
     };
     const handleCardClick = (selectedArtist) => {
-        dispatch(setSelectedArtist(selectedArtist));
+        setCookie("selectedArtist",selectedArtist);
         navigate("/chat");
     }
 
@@ -52,6 +49,7 @@ const Artists = () => {
                 key={d.id} 
                 onClick={()=>{
                     handleCardClick({
+                        id : d.id,
                         name: d.name,
                         img: d.images?.length > 0 ? d.images[0].url : "",
                         popularity: d.popularity,
