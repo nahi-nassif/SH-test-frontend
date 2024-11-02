@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import {
     useParams,
+    useNavigate
   } from "react-router-dom";
 import { useGetArtists } from "../../services/api/apiHooks";
 import { toast } from "react-hot-toast";
 import { useCookies } from "react-cookie";
-import ArtistCard from "../../components/ArtistCard/ArtistCard"
+import ArtistCard from "../../components/ArtistCard/ArtistCard";
+import Header from "../../components/Header/Header"
 
 //Styling
 const cardStyle = "p-4 mx-auto rounded-xl w-full"
@@ -17,7 +19,13 @@ const Artists = () => {
     const { genre } = useParams();
     const [ cookies , ] = useCookies(["authToken"]);
     const token = cookies?.authToken;
-    const { data, error } = useGetArtists(token, genre, 1)
+    const { data, error } = useGetArtists(token, genre, 1);
+
+    const navigate = useNavigate();
+
+    const handleGenreClick = () => {
+        navigate("/"); // Equivalent to a browser back action
+    };
     
 
     useEffect(()=>{
@@ -26,7 +34,13 @@ const Artists = () => {
         }
     },[error])
     
-    return <div title="Artists List" className="text-white">
+    return <div className="text-white">
+        <Header 
+            headerStyle="h-16 bg-[#1A1A1A]"
+            enableBackButton={true}
+        >
+            <h1 className="h-full flex items-center justify-center font-extrabold"><button onClick={handleGenreClick}>Genre</button> / {genre}</h1>
+        </Header>
         <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5  mt-[10%] mx-[12%]">
             { data && data.map( d => <li 
                 key={d.id} 
