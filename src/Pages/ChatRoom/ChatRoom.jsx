@@ -111,7 +111,7 @@ const ChatRoom = () => {
             </Header>
             {/*Used to Reduce Renders to the DOM for large chats*/}
             <VariableSizeListCustom data={messages} listStyles={"text-white mx-[5%] sm:mx-[10%] mt-10 mb-5"}/>
-            <div className="absolute w-full bottom-[5%]">
+            <div className="w-full mb-[2%]">
                 <div className="relative">
                     <TextArea 
                         name="message"
