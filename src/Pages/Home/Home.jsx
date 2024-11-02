@@ -2,7 +2,8 @@ import ButtonGroup from "../../components/ButtonGroup/ButtonGroup";
 import { useGetGenres } from "../../services/api/apiHooks";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect } from "react";
+import { toast } from "react-hot-toast";
 
 //Styling
 const buttonWrapperStyle = "flex-wrap rounded-md shadow-sm p-4 min-w-[50%] justify-center gap-2";
@@ -12,12 +13,18 @@ const containerStyle = "text-center bg-[#1A1A1A] p-5 rounded-xl m-5 max-w-2xl mi
 const Home = () => {
     const [ cookies , ] = useCookies(["authToken"]);
     const token = cookies?.authToken;
-    const { data } =  useGetGenres(token);
+    const { data, error } =  useGetGenres(token);
     const navigate = useNavigate();
 
     const handleGenreChange = (genre) => {
         navigate(`/artists/${genre}`)
     }
+
+    useEffect(()=>{
+        if(error){
+            toast.error(error.response?.data?.message || error.message)
+        }
+    },[error])
 
     return <div className="h-screen w-full flex flex-wrap items-center justify-center">
         <ButtonGroup 
