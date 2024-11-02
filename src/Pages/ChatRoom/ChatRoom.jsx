@@ -9,6 +9,7 @@ import Header from "../../components/Header/Header";
 import { FixedSizeList as List } from 'react-window'; //Used to Reduce Renders to the DOM for large chats
 import ArtistHeaderCard from "../../components/ArtistHeaderCard/ArtistHeaderCard";
 import TextArea from "../../components/Inputs/TextArea/TextArea";
+import VariableSizeListCustom from "../../components/VariableSizeListCustom/VariableSizeListCustom"
 
 //Styling
 //headerCardStyle
@@ -28,8 +29,8 @@ const ChatRoom = () => {
     const token = cookies?.authToken;
     const { data, error } = useGetChatHistory(token, artist?.id); //Get chat history if available
     const navigate = useNavigate();
-    const oldMessages = data && data.length > 0 ? data : [];
-    const [messages, setMessages] = useState(oldMessages) //State to hold chat
+    const [messages, setMessages] = useState([]) //State to hold chat
+    const [initMessagesFetched, setInitMessagesFetched] = useState(false);
 
     const ref = useRef(null); //Used to Reference the user's inputs (To Reduce renders instead of using states)
 
@@ -42,26 +43,9 @@ const ChatRoom = () => {
             setMessages((prevMessages) => [...prevMessages, {isReply: false, fromId: artist.id, message: ref.current.value}])
             getResponse.mutate({token: token, artistId: artist.id,message: ref.current.value});
 
-        }
-        
-
+        }  
     }
-    // Calculate window dimensions to use in Fixed List
-    const [windowDimensions, setWindowDimensions] = useState({
-        width: window.innerWidth,
-        height: window.innerHeight,
-    });
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowDimensions({
-                width: window.innerWidth,
-                height: window.innerHeight,
-            });
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    
     
     useEffect(()=>{
         if(!artist?.id)
@@ -70,6 +54,7 @@ const ChatRoom = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
+    //Error
     useEffect(() => {
         if (error) {
             toast.error(error.response?.data?.message || error.message)
@@ -80,6 +65,7 @@ const ChatRoom = () => {
         }
     }, [error])
 
+    //Error
     useEffect(() => {
         if (getResponse.error) {
             toast.error(getResponse.error.response?.data?.message || getResponse.error.message)
@@ -90,15 +76,24 @@ const ChatRoom = () => {
         }
     }, [getResponse.error]);
 
+    //Add Response
     useEffect(() => {
         if (getResponse.data) {
             setMessages((prevMessages) => [...prevMessages, {isReply: getResponse.data.isReply, fromId:  getResponse.data.fromId, message: getResponse.data.message}])
         }
     }, [getResponse.data]);
 
+    //Init From Message History, Renders Once
+    useEffect(()=>{
+        if(data && data.length && initMessagesFetched === false){
+            setMessages(data);
+            setInitMessagesFetched(true)
+        }   
+    },[data, initMessagesFetched])
+
 
     return (
-        <div>
+        <div className="h-screen overflow-x-hidden">
             <Header
                 headerStyle="h-16 bg-[#1A1A1A]"
                 enableBackButton={true}
@@ -115,20 +110,7 @@ const ChatRoom = () => {
                 />
             </Header>
             {/*Used to Reduce Renders to the DOM for large chats*/}
-            <List
-                height={windowDimensions.height - 100}
-                width={windowDimensions.width}
-                itemCount={messages.length}
-                itemSize={50}
-                itemData={messages}
-                className="max-w-full text-white"
-            >
-                {({ index, style, data }) => (
-                    <div style={style}>
-                        <p>{data[index].message}</p>
-                    </div>
-                )}
-            </List>
+            <VariableSizeListCustom data={messages} listStyles={"text-white"}/>
             <div className="absolute w-full bottom-[5%]">
                 <div className="relative">
                     <TextArea 
