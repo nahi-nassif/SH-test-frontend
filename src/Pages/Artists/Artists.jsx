@@ -30,7 +30,8 @@ const Artists = () => {
         navigate("/"); // Equivalent to a browser back action
     };
     const handleCardClick = (selectedArtist) => {
-        dispatch(setSelectedArtist(selectedArtist))
+        dispatch(setSelectedArtist(selectedArtist));
+        navigate("/chat");
     }
 
     useEffect(()=>{
