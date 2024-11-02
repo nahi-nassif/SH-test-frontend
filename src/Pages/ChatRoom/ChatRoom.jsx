@@ -17,9 +17,10 @@ const titleStyle = "text-left font-bold text-white"
 const followerStyle = "text-left text-sm text-[#B3B3B3] font-semibold"
 const popularitStyle = "ml-2 bg-[#0D3D45] text-[#69D8F7] text-sm font-bold rounded-sm min-w-[39px] inline-block text-center"
 //TextAreaStyle
-const counterStyle = "text-sm right-24 text-[#A9ABB2]"
-const textAreaStyle = "border border-[#E5E7EB] rounder-lg"
-const textAreaContainerStyle = "mx-[10%]"
+const counterStyle = "text-sm right-24 text-[#A9ABB2] bottom-8"
+const textAreaStyle = "border border-[#E5E7EB] rounded-lg"
+const textAreaContainerStyle = "mx-[10%] bg-[#F9F9F9] border border-[#E5E7EB] flex p-4 rounded-3xl"
+const iconStyle = "left-7 top-9"
 
 const ChatRoom = () => {  
     const [cookies,] = useCookies(["authToken","selectedArtist"]);
@@ -29,7 +30,6 @@ const ChatRoom = () => {
     const navigate = useNavigate();
     const oldMessages = data && data.length > 0 ? data : [];
     const [messages, setMessages] = useState(oldMessages)
-    const [input, setInput] = useState("");
 
     const ref = useRef(null); //Used to Reference the user's inputs (To Reduce renders instead of using states)
 
@@ -98,16 +98,17 @@ const ChatRoom = () => {
                     </div>
                 )}
             </List>
-            <div className="absolute w-full">
+            <div className="absolute w-full bottom-[5%]">
                 <TextArea 
                     name="message"
                     ref={ref}
-                    onChange={() => setInput(input)}
                     placeholder={"Type text, or upload, paste, and drag an image here. "}
                     placeholderIcon={<img alt="icon" src="/icons/chatIcon.png"/>}
                     counterStyle={counterStyle}
                     textAreaContainerStyle={textAreaContainerStyle}
                     textAreaStyle={textAreaStyle}
+                    iconStyle={iconStyle}
+                    rows={3}
                 />
             </div>
 

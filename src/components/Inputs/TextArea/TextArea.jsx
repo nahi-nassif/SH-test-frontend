@@ -1,7 +1,7 @@
 import "./style.css"
 import { forwardRef, useState } from 'react';
 
-const TextArea = forwardRef(({ name, maxCharacters, rows, placeholder, placeholderIcon, onChange, onFocus, textAreaContainerStyle, textAreaStyle, counterStyle}, ref) => {
+const TextArea = forwardRef(({ name, maxCharacters, rows, placeholder, placeholderIcon, onChange = ()=>null, onFocus = ()=>null, textAreaContainerStyle, textAreaStyle, counterStyle, iconStyle}, ref) => {
 
     const maxChars = maxCharacters || 3000; // Maximum character limit
     const [inputLength, setInputLength] = useState(0)
@@ -22,7 +22,7 @@ const TextArea = forwardRef(({ name, maxCharacters, rows, placeholder, placehold
                 className={"p-4 placeholder:indent-4 " + textAreaStyle}
             />
             {
-                placeholderIcon && <span className="icon absolute top-5 left-2 w-4">
+                placeholderIcon && <span className={"icon absolute top-5 left-2 w-4 " + iconStyle}>
                     {placeholderIcon}
                 </span>
             }
