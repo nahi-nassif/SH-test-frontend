@@ -37,7 +37,7 @@ const Artists = () => {
         }
     },[error])
     
-    return <div className="text-white">
+    return <div className="text-white overflow-x-hidden">
         <Header 
             headerStyle="h-16 bg-[#1A1A1A]"
             enableBackButton={true}
