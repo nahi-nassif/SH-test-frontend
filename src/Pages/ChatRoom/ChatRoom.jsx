@@ -6,10 +6,9 @@ import { useGetChatHistory, useGetResponse } from "../../services/api/apiHooks";
 import { toast } from "react-hot-toast";
 import { useCookies } from "react-cookie";
 import Header from "../../components/Header/Header";
-import { FixedSizeList as List } from 'react-window'; //Used to Reduce Renders to the DOM for large chats
 import ArtistHeaderCard from "../../components/ArtistHeaderCard/ArtistHeaderCard";
 import TextArea from "../../components/Inputs/TextArea/TextArea";
-import VariableSizeListCustom from "../../components/VariableSizeListCustom/VariableSizeListCustom"
+import VariableSizeListCustom from "../../components/VariableSizeListCustom/VariableSizeListCustom"  //Used to Reduce Renders to the DOM for large chats
 
 //Styling
 //headerCardStyle
@@ -81,14 +80,16 @@ const ChatRoom = () => {
             ref.current.disabled = false;
             setMessages((prevMessages) => [...prevMessages, {isReply: true, fromId:  artist.id, message: getResponse.data.message}])
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getResponse.data]);
 
     //Init From Message History, Renders Once
     useEffect(()=>{
         if(data && data.length && initMessagesFetched === false){
             setMessages(data);
-            setInitMessagesFetched(true)
-        }   
+            setInitMessagesFetched(true);
+        }
+         
     },[data, initMessagesFetched])
 
 
